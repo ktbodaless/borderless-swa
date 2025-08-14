@@ -3,7 +3,7 @@
     "rewrite": "/index.html",
     "exclude": [
       "/api/*",
-      "/.auth/*",         // <-- IMPORTANT: do not rewrite SWA auth endpoints
+      "/.auth/*",
       "/auth/*",
       "/feed.html",
       "/messages.html",
@@ -16,11 +16,9 @@
         "b2c": {
           "registration": {
             "clientIdSettingName": "B2C_CLIENT_ID",
-            "clientCredential": {
-              "clientSecretSettingName": "B2C_CLIENT_SECRET"
-            },
+            "clientCredential": { "clientSecretSettingName": "B2C_CLIENT_SECRET" },
             "openIdConnectConfiguration": {
-              "wellKnownOpenIdConfiguration": "https://bodaless.ciamlogin.com/TENANT_PREFIX.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=signupsignin1"
+              "wellKnownOpenIdConfiguration": "https://bodaless.ciamlogin.com/bodaless.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=signupsignin1"
             }
           },
           "login": { "scopes": ["openid", "profile", "email"] }
@@ -28,11 +26,9 @@
         "b2c_reset": {
           "registration": {
             "clientIdSettingName": "B2C_CLIENT_ID",
-            "clientCredential": {
-              "clientSecretSettingName": "B2C_CLIENT_SECRET"
-            },
+            "clientCredential": { "clientSecretSettingName": "B2C_CLIENT_SECRET" },
             "openIdConnectConfiguration": {
-              "wellKnownOpenIdConfiguration": "https://bodaless.ciamlogin.com/TENANT_PREFIX.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=passwordreset1"
+              "wellKnownOpenIdConfiguration": "https://bodaless.ciamlogin.com/bodaless.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=passwordreset1"
             }
           },
           "login": { "scopes": ["openid"] }
