@@ -5,88 +5,100 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Borderless — Visa Sponsorship Jobs</title>
 <style>
-  :root { --ink:#0f172a; --muted:#64748b; --line:#e6e8ee; --brand:#2563eb; --bg:#f7f8fb; }
+  :root { --ink:#0f172a; --muted:#64748b; --line:#e6e8ee; --brand:#2563eb; }
   *{box-sizing:border-box} body{margin:0;font-family:ui-sans-serif,system-ui;color:var(--ink);background:linear-gradient(180deg,#f8fafc,#eef2ff 60%,#f8fafc)}
-  header{position:sticky;top:0;backdrop-filter:saturate(140%) blur(8px);background:rgba(255,255,255,.75);border-bottom:1px solid var(--line);padding:12px 16px;font-weight:800}
-  main{max-width:1040px;margin:0 auto;padding:16px}
+  header{position:sticky;top:0;backdrop-filter:saturate(140%) blur(8px);background:rgba(255,255,255,.75);border-bottom:1px solid var(--line);padding:12px 16px;font-weight:800;display:flex;justify-content:space-between;align-items:center}
+  main{max-width:1100px;margin:0 auto;padding:16px}
   .hero{text-align:center;padding:28px 8px 12px}.hero h1{font-size:clamp(24px,4vw,34px);margin:0 0 8px}.hero p{color:var(--muted);margin:0}
-  .controls{display:grid;gap:8px;margin-top:8px}.row{display:flex;gap:8px}
-  input,select,button{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px}
-  input{flex:1;background:#fff}button{cursor:pointer}.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .controls{display:grid;gap:8px;margin-top:8px}.row{display:flex;gap:8px;flex-wrap:wrap}
+  input,select,button{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;background:#fff}
+  input[type="number"]{width:120px}
+  button{cursor:pointer}.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
   .meta{display:flex;justify-content:space-between;align-items:center;margin:10px 0;color:var(--muted);font-size:14px}
-  .btnlink{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 10px;font-size:12px;cursor:pointer}
+  .pill{border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:12px;background:#fff;margin-right:6px}
   ul{list-style:none;padding:0;margin:0;display:grid;gap:12px}
   li{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 6px 20px rgba(0,0,0,.03)}
-  .title{display:flex;justify-content:space-between;gap:8px;font-weight:700}.where{color:var(--muted);font-size:14px;margin-top:2px}
-  .pill{border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:12px;background:#fff}
+  .title{display:flex;justify-content:space-between;gap:8px;font-weight:700}
+  .where{color:var(--muted);font-size:14px;margin-top:2px}
   .empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px;background:#fff}
-  .footer{font-size:12px;color:#94a3b8;margin-top:16px;text-align:center}
+  .link{color:#2563eb;text-decoration:none}
 </style>
 </head>
 <body>
-<header>Borderless</header>
+<header>
+  <span>Borderless</span>
+  <nav>
+    <button id="savedBtn" class="pill" title="View saved jobs">Saved</button>
+  </nav>
+</header>
+
 <main>
   <section class="hero">
     <h1>Find U.S. jobs that sponsor your visa</h1>
-    <p>We scan employer job boards (Greenhouse & Lever) and show roles with explicit sponsorship language (H-1B, E-3, TN, O-1, OPT/CPT).</p>
+    <p>Employer job boards only (Greenhouse & Lever). Clear sponsorship signals (H-1B, E-3, TN, O-1, OPT/CPT).</p>
   </section>
 
+  <!-- Search row -->
   <div class="controls">
     <div class="row">
-      <input id="q" placeholder="Try “Business Analyst”, “Software”, “Data”, etc." />
+      <input id="q" placeholder="Keyword (try: Business Analyst, Software, Data…)" />
+      <input id="company" placeholder="Company (optional)" />
+      <input id="city" placeholder="City/State (optional)" />
       <button id="searchBtn" class="primary">Search</button>
     </div>
+
+    <!-- Filters -->
     <div class="row">
       <select id="posted"><option value="24h">Past 24h</option><option value="7d">Past 7 days</option><option value="30d" selected>Past 30 days</option></select>
-      <select id="mode"><option value="any" selected>Any mode</option><option value="remote">Remote</option><option value="onsite">On-site</option></select>
-      <select id="type"><option value="any" selected>Any type</option><option value="fulltime">Full-time</option><option value="contract">Contract</option></select>
+      <select id="mode"><option value="any" selected>Any mode</option><option value="remote">Remote</option><option value="onsite">On-site</option><option value="hybrid">Hybrid</option></select>
+      <select id="type"><option value="any" selected>Any type</option><option value="fulltime">Full-time</option><option value="contract">Contract</option><option value="parttime">Part-time</option></select>
+      <select id="sponsor"><option value="yes" selected>Sponsorship only</option><option value="any">Any sponsorship</option><option value="no">Exclude sponsorship</option></select>
+      <select id="ats"><option value="any" selected>Any ATS</option><option value="greenhouse">Greenhouse</option><option value="lever">Lever</option></select>
+      <input id="minSalary" type="number" min="0" step="1000" placeholder="Min salary ($)" />
+      <input id="minYears" type="number" min="0" step="1" placeholder="Min years" />
       <button id="applyBtn">Apply filters</button>
     </div>
   </div>
 
   <div class="meta">
     <div id="status">Loading…</div>
-    <button id="clearBtn" class="btnlink" title="Clear search">Clear</button>
+    <button id="clearBtn" class="pill">Clear</button>
   </div>
 
   <ul id="list"></ul>
 
-  <p class="footer">
-    Only employer-hosted boards, no aggregators. Links go to the company site. For takedowns or feedback: hello@yourdomain.com.
+  <p style="font-size:12px;color:#94a3b8;margin-top:16px;text-align:center">
+    Legal & compliance: employer ATS only; respectful rate limiting; direct links to company pages. For removal or feedback: hello@yourdomain.com.
   </p>
 </main>
 
 <script>
 const $ = (id) => document.getElementById(id);
-const list = $('list'), status = $('status'), qEl = $('q'), postedEl = $('posted'), modeEl = $('mode'), typeEl = $('type');
+const savedKey = 'borderless_saved';
+const getSaved = () => new Set(JSON.parse(localStorage.getItem(savedKey) || '[]'));
+const setSaved = (s) => localStorage.setItem(savedKey, JSON.stringify([...s]));
 
 function setFromURL(){
-  const u = new URL(location.href);
-  qEl.value = u.searchParams.get('q') || '';
-  postedEl.value = u.searchParams.get('posted') || '30d';
-  modeEl.value = u.searchParams.get('mode') || 'any';
-  typeEl.value = u.searchParams.get('type') || 'any';
+  const u=new URL(location.href);
+  const map = { q:'q', posted:'posted', mode:'mode', type:'type', sponsor:'sponsor', ats:'ats', company:'company', city:'city', minSalary:'minSalary', minYears:'minYears' };
+  for (const [el,param] of Object.entries(map)) { const node=$(el); if (node) node.value = u.searchParams.get(param) || node.value || ''; }
 }
 function pushURL(){
-  const u = new URL(location.href);
-  u.searchParams.set('q', qEl.value.trim());
-  u.searchParams.set('posted', postedEl.value);
-  u.searchParams.set('mode', modeEl.value);
-  u.searchParams.set('type', typeEl.value);
-  history.replaceState({}, '', u.toString());
+  const u=new URL(location.href);
+  const map = { q:'q', posted:'posted', mode:'mode', type:'type', sponsor:'sponsor', ats:'ats', company:'company', city:'city', minSalary:'minSalary', minYears:'minYears' };
+  for (const [el,param] of Object.entries(map)) { const node=$(el); if (node) u.searchParams.set(param, node.value); }
+  history.replaceState({},'',u.toString());
 }
 
 function render(items){
-  list.innerHTML = '';
-  const q = qEl.value.trim();
-  if (!items.length){
-    status.textContent = q ? `0 results for “${q}”` : '0 roles found';
-    list.innerHTML = '<div class="empty">Try broader terms (e.g., “software”, “analyst”, “data”) or extend the date range.</div>';
-    return;
-  }
-  status.textContent = q ? `${items.length} results for “${q}”` : `${items.length} roles found`;
+  const list=$('list'); list.innerHTML='';
+  const q=$('q').value.trim(); $('status').textContent = items.length ? (q ? `${items.length} results for “${q}”` : `${items.length} roles found`) : (q ? `0 results for “${q}”` : '0 roles found');
+  if (!items.length){ list.innerHTML = '<div class="empty">Try broader keywords or extend the date range.</div>'; return; }
+
+  const saved = getSaved();
   for (const job of items){
-    const li = document.createElement('li');
+    const li=document.createElement('li');
+    const savedMark = saved.has(job.id) ? '★ Saved' : '☆ Save';
     li.innerHTML = `
       <div class="title">
         <div>${job.title}</div>
@@ -95,37 +107,82 @@ function render(items){
       <div class="where">${job.company || ''} · ${job.city || ''}${job.state ? ', ' + job.state : ''}</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
         ${(job.flags || []).map(f => `<span class="pill">${f}</span>`).join('')}
-        <span class="pill">${job.workMode === 'remote' ? 'Remote' : 'On-site'}</span>
-        ${job.jobType ? `<span class="pill">${job.jobType === 'contract' ? 'Contract' : 'Full-time'}</span>` : ''}
+        <span class="pill">${job.workMode?.replace(/^./,c=>c.toUpperCase()) || ''}</span>
+        ${job.jobType ? `<span class="pill">${job.jobType==='contract'?'Contract':job.jobType==='parttime'?'Part-time':'Full-time'}</span>` : ''}
+        ${job.salaryMin ? `<span class="pill">$${job.salaryMin.toLocaleString()}+ est.</span>` : ''}
+        ${job.yearsMin ? `<span class="pill">${job.yearsMin}+ yrs</span>` : ''}
+        <span class="pill">ATS: ${job.ats}</span>
+        <span class="pill">Sponsor: ${job.sponsor}</span>
       </div>
-      ${job.url ? `<a href="${job.url}" target="_blank" rel="noreferrer" style="display:inline-block;margin-top:10px;color:#2563eb">Apply on company site →</a>` : ''}
+      <div style="margin-top:10px;display:flex;gap:12px;align-items:center">
+        ${job.url ? `<a class="link" href="${job.url}" target="_blank" rel="noreferrer">Apply on company site →</a>` : ''}
+        <button class="pill" data-save="${job.id}">${savedMark}</button>
+      </div>
     `;
     list.appendChild(li);
   }
+
+  // save buttons
+  list.querySelectorAll('button[data-save]').forEach(btn=>{
+    btn.onclick = ()=>{ const id=btn.getAttribute('data-save'); const set=getSaved();
+      if(set.has(id)){ set.delete(id); } else { set.add(id); }
+      setSaved(set); btn.textContent = set.has(id) ? '★ Saved' : '☆ Save';
+    };
+  });
 }
 
 async function fetchData(){
   pushURL();
   const params = new URLSearchParams({
-    q: qEl.value.trim(), posted: postedEl.value, mode: modeEl.value, type: typeEl.value
+    q: $('q').value.trim(),
+    posted: $('posted').value,
+    mode: $('mode').value,
+    type: $('type').value,
+    sponsor: $('sponsor').value,
+    ats: $('ats').value,
+    company: $('company').value.trim(),
+    city: $('city').value.trim(),
+    minSalary: $('minSalary').value || '',
+    minYears: $('minYears').value || ''
   });
-  status.textContent = 'Loading…'; list.innerHTML = '';
+  $('status').textContent='Loading…'; $('list').innerHTML='';
   try {
-    const res = await fetch('/api/search?' + params.toString());
-    const { items = [] } = await res.json();
+    const res=await fetch('/api/search?'+params.toString());
+    const { items=[] } = await res.json();
     render(items);
   } catch(e){
-    status.textContent = 'Error loading jobs'; list.innerHTML = `<div class="empty">${e.message}</div>`;
+    $('status').textContent='Error loading jobs';
+    $('list').innerHTML = `<div class="empty">${e.message}</div>`;
   }
 }
 
-$('searchBtn').onclick = fetchData;
-$('applyBtn').onclick = fetchData;
-$('clearBtn').onclick = () => { qEl.value=''; fetchData(); };
-qEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') fetchData(); });
-
-setFromURL();
-fetchData();
+$('searchBtn').onclick=fetchData;
+$('applyBtn').onclick=fetchData;
+$('clearBtn').onclick=()=>{ ['q','company','city','minSalary','minYears'].forEach(id=>$(id).value=''); fetchData(); };
+$('savedBtn').onclick=()=>{
+  const set = getSaved();
+  if (!set.size) { alert('No saved jobs yet. Click “Save” on any listing.'); return; }
+  // quick filter: show only saved
+  const allBtns = document.querySelectorAll('button[data-save]');
+  if (allBtns.length) {
+    // if results are already rendered, filter them visually
+    document.querySelectorAll('#list li').forEach(li=>{
+      const id = li.querySelector('button[data-save]')?.getAttribute('data-save');
+      li.style.display = id && set.has(id) ? 'block' : 'none';
+    });
+    $('status').textContent = `${set.size} saved job${set.size>1?'s':''}`;
+  } else {
+    fetchData().then(()=>{
+      document.querySelectorAll('#list li').forEach(li=>{
+        const id = li.querySelector('button[data-save]')?.getAttribute('data-save');
+        li.style.display = id && set.has(id) ? 'block' : 'none';
+      });
+      $('status').textContent = `${set.size} saved job${set.size>1?'s':''}`;
+    });
+  }
+};
+document.getElementById('q').addEventListener('keydown',(e)=>{ if(e.key==='Enter') fetchData(); });
+setFromURL(); fetchData();
 </script>
 </body>
 </html>
