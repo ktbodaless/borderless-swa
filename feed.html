@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Feed — Borderless</title>
+<meta name="color-scheme" content="light">
+<style>
+  :root { --ink:#0f172a; --muted:#64748b; --line:#e6e8ee; --brand:#2563eb; --card:#ffffff; }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:#f7f8fb;color:var(--ink)}
+
+  /* Header */
+  header{position:sticky;top:0;z-index:50;display:grid;grid-template-columns:200px 1fr 200px;gap:12px;
+          align-items:center;background:rgba(255,255,255,.85);backdrop-filter:saturate(140%) blur(8px);
+          border-bottom:1px solid var(--line);padding:10px 16px}
+  .logo{font-weight:800}
+  .search{display:flex;gap:8px}
+  .search input{flex:1;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff}
+  .btn{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;cursor:pointer}
+  .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+  a.btn{color:inherit;text-decoration:none;display:inline-block}
+
+  /* Layout */
+  main{max-width:1200px;margin:14px auto;padding:0 12px}
+  .grid{display:grid;grid-template-columns:260px minmax(520px,1fr) 320px;gap:16px}
+  @media (max-width:1100px){ .grid{grid-template-columns:220px 1fr 280px} }
+  @media (max-width:930px){ .grid{grid-template-columns:1fr} header{grid-template-columns:1fr;gap:8px} }
+
+  /* Cards & lists */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 6px 20px rgba(0,0,0,.03)}
+  .muted{color:var(--muted)}
+  .nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:inherit;text-decoration:none;border:1px solid var(--line);background:#fff;margin:8px 0}
+  .nav a:hover{background:#eef2ff}
+  .small{font-size:12px}
+  .pill{border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:12px;background:#fff}
+  .flex{display:flex;align-items:center}
+  .gap8{gap:8px}
+  .gap12{gap:12px}
+  .space-between{justify-content:space-between}
+
+  /* Avatar */
+  .avatar{width:44px;height:44px;border-radius:999px;background:#e0e7ff;color:#1e40af;display:inline-flex;align-items:center;justify-content:center;font-weight:800}
+
+  /* Composer */
+  .composer textarea{width:100%;min-height:56px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;resize:vertical;background:#fff}
+  .composer .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+  .hidden{display:none}
+
+  /* Feed items */
+  .post{margin-bottom:12px}
+  .post .img{margin-top:8px;max-height:420px;overflow:hidden;border-radius:10px;border:1px solid var(--line)}
+  .toolbar{display:flex;gap:10px;margin-top:8px}
+  .toolbar button{font-size:12px}
+
+  /* Right rail */
+  .list{display:grid;gap:10px}
+  .ad{height:160px;border:2px dashed var(--line);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--muted);background:#fff}
+
+  /* Chat */
+  .chatbar{position:fixed;right:16px;bottom:16px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;box-shadow:0 10px 26px rgba(0,0,0,.07)}
+  .chat{position:fixed;right:16px;bottom:70px;width:320px;max-height:420px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 26px rgba(0,0,0,.08);display:none;flex-direction:column}
+  .chat header{position:static;display:flex;grid-template-columns:unset;gap:0;backdrop-filter:none;padding:10px;border-bottom:1px solid var(--line)}
+  .chat main{padding:10px}
+  .chatlog{height:260px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:8px;background:#f8fafc}
+  .chat input{width:100%;border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-top:8px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><a href="/feed.html" style="text-decoration:none;color:inherit">BORDERLESS</a></div>
+  <div class="search">
+    <label for="globalSearch" class="small" style="position:absolute;left:-9999px">Search</label>
+    <input id="globalSearch" placeholder="Search posts & people">
+    <button class="btn" id="searchBtn">Search</button>
+  </div>
+  <div class="flex gap8" style="justify-content:flex-end">
+    <a class="btn" href="/profile.html">My Profile</a>
+  </div>
+</header>
+
+<main>
+  <div class="grid">
+
+    <!-- LEFT -->
+    <aside class="card">
+      <div class="flex gap12">
+        <div class="avatar" id="leftAvatar">U</div>
+        <div>
+          <div id="leftName" style="font-weight:700">User</div>
+          <div class="small muted" id="leftTag">Data Analyst | OPT → H-1B hopeful</div>
+        </div>
+      </div>
+
+      <div class="small muted" style="margin-top:12px">Add photo</div>
+      <div class="flex gap8" style="margin-top:4px">
+        <input id="profilePhoto" type="file" accept="image/*" class="hidden" />
+        <button class="btn" id="uploadBtn">Upload Photo</button>
+      </div>
+
+      <nav class="nav" style="margin-top:12px">
+        <a href="/feed.html">🏠 Home / Feed</a>
+        <a href="/">💼 Jobs</a>
+        <a href="/messages.html">💬 Messages</a>
+      </nav>
+
+      <button class="btn" style="width:100%">My contacts</button>
+    </aside>
+
+    <!-- CENTER -->
+    <section>
+
+      <!-- Composer -->
+      <div class="card composer">
+        <textarea id="postText" placeholder="Post anything here"></textarea>
+        <div class="flex gap8" style="margin-top:8px">
+          <input id="postImage" type="file" accept="image/*" class="hidden" />
+          <button class="btn" id="addImageBtn">Upload Photo</button>
+          <div class="muted small" id="imgNote" style="display:none">Image attached</div>
+          <div class="actions" style="margin-left:auto">
+            <button class="btn primary" id="postBtn">Post</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feed -->
+      <div id="feed"></div>
+
+    </section>
+
+    <!-- RIGHT -->
+    <aside class="list">
+
+      <div class="card">
+        <div style="font-weight:700;margin-bottom:8px">Suggested connections</div>
+        <div id="suggestions" class="list"></div>
+        <button class="btn" id="seeAllBtn">See all</button>
+      </div>
+
+      <div class="card">
+        <div style="font-weight:700;margin-bottom:8px">Sponsor resources</div>
+        <ul style="margin:0;padding-left:18px">
+          <li><a href="https://www.uscis.gov/working-in-the-united-states/temporary-workers/h-1b-specialty-occupations" target="_blank" rel="noreferrer">How H-1B works</a></li>
+          <li><a href="https://www.uscis.gov/working-in-the-united-states/students-and-exchange-visitors/students-and-employment" target="_blank" rel="noreferrer">OPT → H-1B timeline</a></li>
+          <li><a href="https://www.dol.gov/agencies/whd/immigration/certification" target="_blank" rel="noreferrer">Cap-exempt employers</a></li>
+        </ul>
+      </div>
+
+      <div class="ad">ADDS</div>
+
+    </aside>
+
+  </div>
+</main>
+
+<!-- Chat -->
+<div class="chat" id="chatBox" role="dialog" aria-modal="true" aria-label="Chat">
+  <header>Start a chat</header>
+  <main>
+    <div class="chatlog" id="chatLog"></div>
+    <input id="chatInput" placeholder="Type a message and hit Enter">
+  </main>
+</div>
+<div class="chatbar">
+  <button class="btn" id="chatToggle">Start a chat</button>
+</div>
+
+<script>
+/* --------- AUTH DISPLAY (name/initials) --------- */
+fetch('/.auth/me').then(r=>r.json()).then(d=>{
+  const u = d?.clientPrincipal;
+  const name = u?.userDetails || 'User';
+  document.getElementById('leftName').textContent = name;
+  document.getElementById('leftAvatar').textContent = (name.trim()[0] || 'U').toUpperCase();
+}).catch(()=>{});
+
+/* --------- SIMPLE CLIENT FEED (localStorage) --------- */
+const POSTS_KEY='borderless_posts_v1';
+const readPosts=()=>JSON.parse(localStorage.getItem(POSTS_KEY)||'[]');
+const writePosts=(x)=>localStorage.setItem(POSTS_KEY,JSON.stringify(x.slice(0,200)));
+
+function renderPosts(filter=''){
+  const root=document.getElementById('feed'); root.innerHTML='';
+  const posts=readPosts().filter(p=>p.text.toLowerCase().includes(filter.toLowerCase()));
+  if(!posts.length){ const empty=document.createElement('div'); empty.className='card muted'; empty.textContent='Show posts by other users and communities'; root.appendChild(empty); return; }
+  for(const p of posts){
+    const el=document.createElement('article'); el.className='card post';
+    el.innerHTML=`
+      <div class="flex space-between">
+        <div class="flex gap12">
+          <div class="avatar">${(p.author||'U')[0]}</div>
+          <div>
+            <div style="font-weight:700">${p.author||'User'}</div>
+            <div class="small muted">${new Date(p.ts).toLocaleString()}</div>
+          </div>
+        </div>
+        <span class="small muted">${p.privacy || 'Public'}</span>
+      </div>
+      <div style="margin-top:8px;white-space:pre-wrap">${p.text}</div>
+      ${p.img ? `<div class="img"><img src="${p.img}" alt="" style="width:100%;display:block"></div>` : ``}
+      <div class="toolbar">
+        <button class="btn small" data-like="${p.id}">👍 Like (${p.likes||0})</button>
+        <button class="btn small" disabled>💬 Comment</button>
+        <button class="btn small" disabled>↗ Share</button>
+      </div>`;
+    root.appendChild(el);
+  }
+  root.querySelectorAll('[data-like]').forEach(b=>{
+    b.onclick=()=>{ const id=b.getAttribute('data-like'); const arr=readPosts(); const i=arr.findIndex(x=>x.id===id);
+      if(i>-1){ arr[i].likes=(arr[i].likes||0)+1; writePosts(arr); renderPosts(filter); }
+    };
+  });
+}
+
+let pendingImg=null;
+document.getElementById('addImageBtn').onclick=()=>document.getElementById('postImage').click();
+document.getElementById('postImage').onchange=(e)=>{
+  const f=e.target.files?.[0]; if(!f) return;
+  const r=new FileReader(); r.onload=()=>{ pendingImg=r.result; document.getElementById('imgNote').style.display='inline'; }; r.readAsDataURL(f);
+};
+document.getElementById('uploadBtn').onclick=()=>document.getElementById('profilePhoto').click();
+
+document.getElementById('postBtn').onclick=()=>{
+  const text=document.getElementById('postText').value.trim(); if(!text && !pendingImg) return;
+  fetch('/.auth/me').then(r=>r.json()).then(d=>{
+    const author = d?.clientPrincipal?.userDetails || 'User';
+    const arr=readPosts();
+    arr.unshift({ id:crypto.randomUUID(), author, text, img:pendingImg, likes:0, ts:Date.now(), privacy:'Public' });
+    writePosts(arr); document.getElementById('postText').value=''; pendingImg=null; document.getElementById('imgNote').style.display='none'; renderPosts(document.getElementById('globalSearch').value);
+  }).catch(()=>{ /* fallback */ });
+};
+
+/* --------- Suggestions (mock) --------- */
+const SUG = [
+  {name:'Fatima Z', role:'Data Scientist', visa:'O-1'},
+  {name:'Wei L', role:'SWE', visa:'E-3'},
+  {name:'Arya K', role:'PM', visa:'H-1B transfer'}
+];
+const sugRoot=document.getElementById('suggestions');
+function renderSug(){
+  sugRoot.innerHTML='';
+  for(const s of SUG){
+    const row=document.createElement('div'); row.className='flex space-between card'; row.style.padding='10px';
+    row.innerHTML = `<div><div style="font-weight:700">${s.name}</div><div class="small muted">${s.role} (${s.visa})</div></div>
+                     <button class="btn small">Connect</button>`;
+    sugRoot.appendChild(row);
+  }
+}
+document.getElementById('seeAllBtn').onclick=()=>alert('Coming soon: full suggestions list.');
+renderSug();
+
+/* --------- Search & Chat --------- */
+document.getElementById('searchBtn').onclick=()=>renderPosts(document.getElementById('globalSearch').value);
+document.getElementById('globalSearch').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('searchBtn').click(); });
+
+const chatBox=document.getElementById('chatBox'), chatToggle=document.getElementById('chatToggle');
+chatToggle.onclick=()=>{ chatBox.style.display = chatBox.style.display==='flex' ? 'none' : 'flex'; chatBox.classList.add('chat'); chatBox.style.display='flex'; };
+document.getElementById('chatInput').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){ const v=e.target.value.trim(); if(!v) return;
+    const log=document.getElementById('chatLog'); const p=document.createElement('div'); p.textContent='You: '+v; log.appendChild(p); log.scrollTop=log.scrollHeight; e.target.value=''; }
+});
+/* initial render */
+renderPosts();
+</script>
+</body>
+</html>
