@@ -34,5 +34,5 @@
     { "route": "/messages.html", "allowedRoles": ["authenticated"] },
     { "route": "/profile.html", "allowedRoles": ["authenticated"] }
   ],
-  "responseOverrides": { "401": { "redirect": "/auth/signin.html", "statusCode": 302 } }
+  "responseOverrides": { "401": { "redirect": "/signin.html", "statusCode": 302 } }
 }
