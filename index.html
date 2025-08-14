@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Borderless — Visa Sponsorship Jobs</title>
+  <style>
+    :root { --b:#e5e7eb; --t:#0f172a; --m:#475569; --link:#2563eb; }
+    body { font-family: system-ui, sans-serif; color: var(--t); margin:0; }
+    header { border-bottom:1px solid var(--b); padding:12px 16px; font-weight:700; }
+    main { max-width: 960px; margin: 0 auto; padding: 16px; }
+    .row { display:flex; gap:8px; }
+    .pill { border:1px solid var(--b); border-radius:999px; padding:4px 10px; font-size:12px; }
+    input, select, button { border:1px solid var(--b); border-radius:8px; padding:10px; }
+    button { cursor:pointer; }
+    ul { list-style:none; padding:0; display:grid; gap:12px; }
+    li { border:1px solid var(--b); border-radius:10px; padding:14px; }
+    small { color:#94a3b8 }
+  </style>
+</head>
+<body>
+  <header>Borderless — Visa Sponsorship Jobs</header>
+  <main>
+    <section style="text-align:center; padding:24px 8px">
+      <h1 style="font-size:28px; margin:0 0 8px">Find U.S. jobs that sponsor your visa</h1>
+      <p style="color:var(--m); margin:0">H-1B, E-3, TN, O-1, OPT/CPT — detected from explicit text in job descriptions.</p>
+    </section>
+
+    <div class="row" style="margin:8px 0 6px 0">
+      <input id="q" placeholder="Search title or company (e.g., software, H-1B)" style="flex:1" />
+      <button id="searchBtn">Search</button>
+    </div>
+
+    <div class="row" style="flex-wrap:wrap; margin-bottom:8px">
+      <select id="posted">
+        <option value="24h">Past 24h</option>
+        <option value="7d">Past 7 days</option>
+        <option value="30d" selected>Past 30 days</option>
+      </select>
+      <select id="mode">
+        <option value="any" selected>Any mode</option>
+        <option value="remote">Remote</option>
+        <option value="onsite">On-site</option>
+      </select>
+      <select id="type">
+        <option value="any" selected>Any type</option>
+        <option value="fulltime">Full-time</option>
+        <option value="contract">Contract</option>
+      </select>
+      <button id="applyBtn">Apply filters</button>
+    </div>
+
+    <div id="status" style="color:var(--m); font-size:14px; margin:6px 0">Loading…</div>
+    <ul id="list"></ul>
+
+    <p><small>We only show roles with explicit sponsorship language (e.g., “visa sponsorship available”, H-1B/E-3/TN/OPT/CPT). Apply on the company site.</small></p>
+  </main>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    async function fetchData() {
+      const q = $('q').value.trim();
+      const posted = $('posted').value;
+      const mode = $('mode').value;
+      const type = $('type').value;
+      const params = new URLSearchParams({ q, posted, mode, type });
+      $('status').textContent = 'Loading…';
+      $('list').innerHTML = '';
+      try {
+        const res = await fetch('/api/search?' + params.toString());
+        const { items = [] } = await res.json();
+        $('status').textContent = items.length + ' roles found';
+        const ul = $('list');
+        items.forEach(job => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <div style="display:flex;justify-content:space-between;gap:8px">
+              <div style="font-weight:700">${job.title}</div>
+              <span style="font-size:12px;color:#64748b">${job.postedAt ? new Date(job.postedAt).toLocaleDateString() : ''}</span>
+            </div>
+            <div style="color:#475569;font-size:14px;margin-top:2px">${job.company} · ${job.city || ''}${job.state ? ', ' + job.state : ''}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+              ${(job.flags || []).map(f => `<span class="pill">${f}</span>`).join('')}
+              <span class="pill">${job.workMode === 'remote' ? 'Remote' : 'On-site'}</span>
+              ${job.jobType ? `<span class="pill">${job.jobType === 'contract' ? 'Contract' : 'Full-time'}</span>` : ''}
+            </div>
+            ${job.url ? `<a href="${job.url}" target="_blank" rel="noreferrer" style="color:#2563eb;display:inline-block;margin-top:10px">Apply on company site →</a>` : ''}
+          `;
+          ul.appendChild(li);
+        });
+      } catch (e) {
+        $('status').textContent = 'Error: ' + e.message;
+      }
+    }
+    $('searchBtn').onclick = fetchData;
+    $('applyBtn').onclick = fetchData;
+    fetchData(); // initial load
+  </script>
+</body>
+</html>
