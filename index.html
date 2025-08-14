@@ -1,100 +1,131 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Borderless — Visa Sponsorship Jobs</title>
-  <style>
-    :root { --b:#e5e7eb; --t:#0f172a; --m:#475569; --link:#2563eb; }
-    body { font-family: system-ui, sans-serif; color: var(--t); margin:0; }
-    header { border-bottom:1px solid var(--b); padding:12px 16px; font-weight:700; }
-    main { max-width: 960px; margin: 0 auto; padding: 16px; }
-    .row { display:flex; gap:8px; }
-    .pill { border:1px solid var(--b); border-radius:999px; padding:4px 10px; font-size:12px; }
-    input, select, button { border:1px solid var(--b); border-radius:8px; padding:10px; }
-    button { cursor:pointer; }
-    ul { list-style:none; padding:0; display:grid; gap:12px; }
-    li { border:1px solid var(--b); border-radius:10px; padding:14px; }
-    small { color:#94a3b8 }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Borderless — Visa Sponsorship Jobs</title>
+<style>
+  :root { --ink:#0f172a; --muted:#64748b; --line:#e6e8ee; --brand:#2563eb; --bg:#f7f8fb; }
+  *{box-sizing:border-box} body{margin:0;font-family:ui-sans-serif,system-ui;color:var(--ink);background:linear-gradient(180deg,#f8fafc,#eef2ff 60%,#f8fafc)}
+  header{position:sticky;top:0;backdrop-filter:saturate(140%) blur(8px);background:rgba(255,255,255,.75);border-bottom:1px solid var(--line);padding:12px 16px;font-weight:800}
+  main{max-width:1040px;margin:0 auto;padding:16px}
+  .hero{text-align:center;padding:28px 8px 12px}.hero h1{font-size:clamp(24px,4vw,34px);margin:0 0 8px}.hero p{color:var(--muted);margin:0}
+  .controls{display:grid;gap:8px;margin-top:8px}.row{display:flex;gap:8px}
+  input,select,button{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px}
+  input{flex:1;background:#fff}button{cursor:pointer}.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .meta{display:flex;justify-content:space-between;align-items:center;margin:10px 0;color:var(--muted);font-size:14px}
+  .btnlink{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 10px;font-size:12px;cursor:pointer}
+  ul{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+  li{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 6px 20px rgba(0,0,0,.03)}
+  .title{display:flex;justify-content:space-between;gap:8px;font-weight:700}.where{color:var(--muted);font-size:14px;margin-top:2px}
+  .pill{border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:12px;background:#fff}
+  .empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px;background:#fff}
+  .footer{font-size:12px;color:#94a3b8;margin-top:16px;text-align:center}
+</style>
 </head>
 <body>
-  <header>Borderless — Visa Sponsorship Jobs</header>
-  <main>
-    <section style="text-align:center; padding:24px 8px">
-      <h1 style="font-size:28px; margin:0 0 8px">Find U.S. jobs that sponsor your visa</h1>
-      <p style="color:var(--m); margin:0">H-1B, E-3, TN, O-1, OPT/CPT — detected from explicit text in job descriptions.</p>
-    </section>
+<header>Borderless</header>
+<main>
+  <section class="hero">
+    <h1>Find U.S. jobs that sponsor your visa</h1>
+    <p>We scan employer job boards (Greenhouse & Lever) and show roles with explicit sponsorship language (H-1B, E-3, TN, O-1, OPT/CPT).</p>
+  </section>
 
-    <div class="row" style="margin:8px 0 6px 0">
-      <input id="q" placeholder="Search title or company (e.g., software, H-1B)" style="flex:1" />
-      <button id="searchBtn">Search</button>
+  <div class="controls">
+    <div class="row">
+      <input id="q" placeholder="Try “Business Analyst”, “Software”, “Data”, etc." />
+      <button id="searchBtn" class="primary">Search</button>
     </div>
-
-    <div class="row" style="flex-wrap:wrap; margin-bottom:8px">
-      <select id="posted">
-        <option value="24h">Past 24h</option>
-        <option value="7d">Past 7 days</option>
-        <option value="30d" selected>Past 30 days</option>
-      </select>
-      <select id="mode">
-        <option value="any" selected>Any mode</option>
-        <option value="remote">Remote</option>
-        <option value="onsite">On-site</option>
-      </select>
-      <select id="type">
-        <option value="any" selected>Any type</option>
-        <option value="fulltime">Full-time</option>
-        <option value="contract">Contract</option>
-      </select>
+    <div class="row">
+      <select id="posted"><option value="24h">Past 24h</option><option value="7d">Past 7 days</option><option value="30d" selected>Past 30 days</option></select>
+      <select id="mode"><option value="any" selected>Any mode</option><option value="remote">Remote</option><option value="onsite">On-site</option></select>
+      <select id="type"><option value="any" selected>Any type</option><option value="fulltime">Full-time</option><option value="contract">Contract</option></select>
       <button id="applyBtn">Apply filters</button>
     </div>
+  </div>
 
-    <div id="status" style="color:var(--m); font-size:14px; margin:6px 0">Loading…</div>
-    <ul id="list"></ul>
+  <div class="meta">
+    <div id="status">Loading…</div>
+    <button id="clearBtn" class="btnlink" title="Clear search">Clear</button>
+  </div>
 
-    <p><small>We only show roles with explicit sponsorship language (e.g., “visa sponsorship available”, H-1B/E-3/TN/OPT/CPT). Apply on the company site.</small></p>
-  </main>
+  <ul id="list"></ul>
 
-  <script>
-    const $ = (id) => document.getElementById(id);
-    async function fetchData() {
-      const q = $('q').value.trim();
-      const posted = $('posted').value;
-      const mode = $('mode').value;
-      const type = $('type').value;
-      const params = new URLSearchParams({ q, posted, mode, type });
-      $('status').textContent = 'Loading…';
-      $('list').innerHTML = '';
-      try {
-        const res = await fetch('/api/search?' + params.toString());
-        const { items = [] } = await res.json();
-        $('status').textContent = items.length + ' roles found';
-        const ul = $('list');
-        items.forEach(job => {
-          const li = document.createElement('li');
-          li.innerHTML = `
-            <div style="display:flex;justify-content:space-between;gap:8px">
-              <div style="font-weight:700">${job.title}</div>
-              <span style="font-size:12px;color:#64748b">${job.postedAt ? new Date(job.postedAt).toLocaleDateString() : ''}</span>
-            </div>
-            <div style="color:#475569;font-size:14px;margin-top:2px">${job.company} · ${job.city || ''}${job.state ? ', ' + job.state : ''}</div>
-            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
-              ${(job.flags || []).map(f => `<span class="pill">${f}</span>`).join('')}
-              <span class="pill">${job.workMode === 'remote' ? 'Remote' : 'On-site'}</span>
-              ${job.jobType ? `<span class="pill">${job.jobType === 'contract' ? 'Contract' : 'Full-time'}</span>` : ''}
-            </div>
-            ${job.url ? `<a href="${job.url}" target="_blank" rel="noreferrer" style="color:#2563eb;display:inline-block;margin-top:10px">Apply on company site →</a>` : ''}
-          `;
-          ul.appendChild(li);
-        });
-      } catch (e) {
-        $('status').textContent = 'Error: ' + e.message;
-      }
-    }
-    $('searchBtn').onclick = fetchData;
-    $('applyBtn').onclick = fetchData;
-    fetchData(); // initial load
-  </script>
+  <p class="footer">
+    Only employer-hosted boards, no aggregators. Links go to the company site. For takedowns or feedback: hello@yourdomain.com.
+  </p>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const list = $('list'), status = $('status'), qEl = $('q'), postedEl = $('posted'), modeEl = $('mode'), typeEl = $('type');
+
+function setFromURL(){
+  const u = new URL(location.href);
+  qEl.value = u.searchParams.get('q') || '';
+  postedEl.value = u.searchParams.get('posted') || '30d';
+  modeEl.value = u.searchParams.get('mode') || 'any';
+  typeEl.value = u.searchParams.get('type') || 'any';
+}
+function pushURL(){
+  const u = new URL(location.href);
+  u.searchParams.set('q', qEl.value.trim());
+  u.searchParams.set('posted', postedEl.value);
+  u.searchParams.set('mode', modeEl.value);
+  u.searchParams.set('type', typeEl.value);
+  history.replaceState({}, '', u.toString());
+}
+
+function render(items){
+  list.innerHTML = '';
+  const q = qEl.value.trim();
+  if (!items.length){
+    status.textContent = q ? `0 results for “${q}”` : '0 roles found';
+    list.innerHTML = '<div class="empty">Try broader terms (e.g., “software”, “analyst”, “data”) or extend the date range.</div>';
+    return;
+  }
+  status.textContent = q ? `${items.length} results for “${q}”` : `${items.length} roles found`;
+  for (const job of items){
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <div class="title">
+        <div>${job.title}</div>
+        <span style="font-size:12px;color:#64748b">${job.postedAt ? new Date(job.postedAt).toLocaleDateString() : ''}</span>
+      </div>
+      <div class="where">${job.company || ''} · ${job.city || ''}${job.state ? ', ' + job.state : ''}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        ${(job.flags || []).map(f => `<span class="pill">${f}</span>`).join('')}
+        <span class="pill">${job.workMode === 'remote' ? 'Remote' : 'On-site'}</span>
+        ${job.jobType ? `<span class="pill">${job.jobType === 'contract' ? 'Contract' : 'Full-time'}</span>` : ''}
+      </div>
+      ${job.url ? `<a href="${job.url}" target="_blank" rel="noreferrer" style="display:inline-block;margin-top:10px;color:#2563eb">Apply on company site →</a>` : ''}
+    `;
+    list.appendChild(li);
+  }
+}
+
+async function fetchData(){
+  pushURL();
+  const params = new URLSearchParams({
+    q: qEl.value.trim(), posted: postedEl.value, mode: modeEl.value, type: typeEl.value
+  });
+  status.textContent = 'Loading…'; list.innerHTML = '';
+  try {
+    const res = await fetch('/api/search?' + params.toString());
+    const { items = [] } = await res.json();
+    render(items);
+  } catch(e){
+    status.textContent = 'Error loading jobs'; list.innerHTML = `<div class="empty">${e.message}</div>`;
+  }
+}
+
+$('searchBtn').onclick = fetchData;
+$('applyBtn').onclick = fetchData;
+$('clearBtn').onclick = () => { qEl.value=''; fetchData(); };
+qEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') fetchData(); });
+
+setFromURL();
+fetchData();
+</script>
 </body>
 </html>
