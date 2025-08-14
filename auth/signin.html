@@ -3,19 +3,21 @@
 <title>Sign in — Borderless</title>
 <style>
   body{margin:0;font-family:ui-sans-serif,system-ui;background:#f7f8fb;color:#0f172a}
-  .wrap{max-width:420px;margin:4rem auto;background:#fff;border:1px solid #e6e8ee;border-radius:14px;padding:22px;box-shadow:0 8px 24px rgba(0,0,0,.06)}
-  h1{margin:0 0 8px} p{color:#64748b;margin:0 0 14px}
-  a.btn,button{display:block;width:100%;border:1px solid #e6e8ee;border-radius:10px;padding:12px 14px;margin:8px 0;text-align:center;text-decoration:none}
+  .wrap{max-width:480px;margin:6vh auto;background:#fff;border:1px solid #e6e8ee;border-radius:14px;padding:22px;box-shadow:0 8px 24px rgba(0,0,0,.06)}
+  h1{margin:0 0 12px} p{color:#64748b;margin:0 0 14px}
+  a.btn{display:block;width:100%;border:1px solid #e6e8ee;border-radius:10px;padding:12px 14px;margin:10px 0;text-align:center;text-decoration:none}
   .primary{background:#2563eb;color:#fff;border-color:#2563eb}
-  .muted{color:#64748b;font-size:14px;text-align:center;margin-top:6px}
 </style></head><body>
 <div class="wrap">
   <h1>Welcome back</h1>
-  <p>Use your email account. We use Microsoft Azure AD B2C for secure sign-in.</p>
+  <p>Use your email account. Sign in is handled securely by Microsoft Entra External ID.</p>
+
+  <!-- IMPORTANT: absolute paths starting with "/" -->
   <a class="btn primary" href="/.auth/login/b2c?post_login_redirect_uri=/feed.html">Continue with Email</a>
-  <a class="btn" href="/auth/signup.html">Create an account</a>
+  <a class="btn" href="/.auth/login/b2c?post_login_redirect_uri=/feed.html">Create an account</a>
   <a class="btn" href="/.auth/login/b2c_reset?post_login_redirect_uri=/auth/signin.html">Forgot password</a>
   <a class="btn" href="/auth/forgot-username.html">Forgot username</a>
-  <p class="muted">By continuing you agree to our Terms and Privacy Policy.</p>
+
+  <p style="color:#94a3b8;font-size:13px;margin-top:8px">By continuing you agree to our Terms and Privacy Policy.</p>
 </div>
 </body></html>
